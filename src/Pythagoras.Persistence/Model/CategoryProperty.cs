@@ -1,6 +1,6 @@
 namespace Saorsa.Pythagoras.Persistence.Model;
 
-public class CategoryProperty : _PropertyBase
+public class CategoryProperty : PropertyBase
 {
     public Guid CategoryId { get; set; }
 

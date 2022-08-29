@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Saorsa.Pythagoras.Persistence.Model;
 
-public class _PropertyBase : _ModelBase<Guid>
+public class PropertyBase : ModelBase<Guid>
 {
     [Required, MaxLength(256)] public string Name { get; set; }
         = $"Property-{Guid.NewGuid():N}";

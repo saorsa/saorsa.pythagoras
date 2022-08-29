@@ -1,6 +1,6 @@
 namespace Saorsa.Pythagoras.Persistence.Model;
 
-public abstract class _ModelBase<TId> where TId : IComparable<TId>, IComparable
+public abstract class ModelBase<TId> where TId : IComparable<TId>, IComparable
 {
     public TId Id { get; set; } = default!;
         
@@ -8,7 +8,7 @@ public abstract class _ModelBase<TId> where TId : IComparable<TId>, IComparable
         = DateTimeOffset.UtcNow;
 
     public string CreatedBy { get; set; }
-        = Constants.DefaultCreatedBy;
+        = Constants.Identities.System;
 
     public DateTimeOffset? ModifiedAt { get; set; }
 

@@ -1,15 +1,15 @@
 version: '3.1'
 services:
   postgres:
-    image: 'postgres:14.1'
+    image: 'postgres:$PYTHAGORAS_POSTGRES_TAG'
     restart: always
     ports:
-      - 5533:5432
+      - $PYTHAGORAS_POSTGRES_PORT:5432
     environment:
       ENVIRONMENT: development
-      POSTGRES_USER: pythagoras
-      POSTGRES_PASSWORD: pythagoras
-      POSTGRES_DB: pythagoras
+      POSTGRES_USER: $PYTHAGORAS_POSTGRES_USER
+      POSTGRES_PASSWORD: $PYTHAGORAS_POSTGRES_PASSWORD
+      POSTGRES_DB: $PYTHAGORAS_POSTGRES_DATABASE
     volumes:
       - ./pg-init-scripts:/docker-entrypoint-initdb.d
       - $HOME/Data/pythagoras_dev:/var/lib/postgresql/data 
