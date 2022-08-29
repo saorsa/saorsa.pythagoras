@@ -1,0 +1,23 @@
+version: '3.1'
+services:
+  postgres:
+    image: 'postgres:14.1'
+    restart: always
+    ports:
+      - 5533:5432
+    environment:
+      ENVIRONMENT: development
+      POSTGRES_USER: pythagoras
+      POSTGRES_PASSWORD: pythagoras
+      POSTGRES_DB: pythagoras
+    volumes:
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
+      - $HOME/Data/pythagoras_dev:/var/lib/postgresql/data 
+    networks:
+      default:
+        ipv4_address: 172.18.1.10
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.18.1.0/24
