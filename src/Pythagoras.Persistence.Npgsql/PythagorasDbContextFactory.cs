@@ -22,7 +22,7 @@ public class PythagorasDbContextFactory : IDesignTimeDbContextFactory<Pythagoras
         {
             var optionsBuilder = new DbContextOptionsBuilder<PythagorasDbContext>();
 
-            optionsBuilder.UseConfigurationStoreWithNpgSql();
+            optionsBuilder.UsePythagorasWithNpgSql();
         
             var result = new PythagorasDbContext(optionsBuilder.Options);
 

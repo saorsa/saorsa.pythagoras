@@ -4,7 +4,7 @@ namespace Saorsa.Pythagoras.Persistence.Npgsql;
 
 public static class NpgsqlDbContextOptionsExtensions
 {
-    public static DbContextOptionsBuilder UseConfigurationStoreWithNpgSql(
+    public static DbContextOptionsBuilder UsePythagorasWithNpgSql(
         this DbContextOptionsBuilder builder,
         string? connectionString = null)
     {

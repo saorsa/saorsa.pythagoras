@@ -11,9 +11,7 @@ public class PythagorasDbContext : DbContext
     public DbSet<CategoryProperty> CategoryProperties => Set<CategoryProperty>();
     public DbSet<CategoryRelation> CategoryRelations => Set<CategoryRelation>();
     
-    public PythagorasDbContext(DbContextOptions<PythagorasDbContext> options) : base(options)
-    {
-    }
+    public PythagorasDbContext(DbContextOptions<PythagorasDbContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
