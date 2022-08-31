@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pythagoras.Domain", "Pythag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pythagoras.CLI.Probe", "Pythagoras.CLI.Probe\Pythagoras.CLI.Probe.csproj", "{23E35E1B-DEE6-4CC3-BA83-84D1E95CA349}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pythagoras.CoreLib", "Pythagoras.CoreLib\Pythagoras.CoreLib.csproj", "{9D51FE42-CD03-4FA5-9D69-47F47F475E13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{23E35E1B-DEE6-4CC3-BA83-84D1E95CA349}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23E35E1B-DEE6-4CC3-BA83-84D1E95CA349}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23E35E1B-DEE6-4CC3-BA83-84D1E95CA349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D51FE42-CD03-4FA5-9D69-47F47F475E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D51FE42-CD03-4FA5-9D69-47F47F475E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D51FE42-CD03-4FA5-9D69-47F47F475E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D51FE42-CD03-4FA5-9D69-47F47F475E13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

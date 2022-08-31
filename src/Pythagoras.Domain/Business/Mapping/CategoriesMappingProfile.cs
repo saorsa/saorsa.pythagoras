@@ -3,7 +3,7 @@ using Saorsa.Pythagoras.Domain.Model;
 using Saorsa.Pythagoras.Domain.Model.Categories;
 using Saorsa.Pythagoras.Persistence.Model;
 
-namespace Saorsa.Pythagoras.Domain.Mapping;
+namespace Saorsa.Pythagoras.Domain.Business.Mapping;
 
 public class CategoriesMappingProfile : Profile
 {

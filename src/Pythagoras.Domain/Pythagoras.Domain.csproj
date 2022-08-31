@@ -8,13 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Pythagoras.CoreLib\Pythagoras.CoreLib.csproj" />
+      <ProjectReference Include="..\Pythagoras.Persistence.Npgsql\Pythagoras.Persistence.Npgsql.csproj" />
       <ProjectReference Include="..\Pythagoras.Persistence\Pythagoras.Persistence.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="11.0.1" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
     </ItemGroup>
 
 </Project>

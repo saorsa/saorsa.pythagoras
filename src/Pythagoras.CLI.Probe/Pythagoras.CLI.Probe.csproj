@@ -8,4 +8,8 @@
         <RootNamespace>Saorsa.Pythagoras.CLI.Probe</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Pythagoras.Domain\Pythagoras.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
