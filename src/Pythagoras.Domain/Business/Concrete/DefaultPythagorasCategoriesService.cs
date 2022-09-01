@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Pythagoras;
 using Saorsa.Pythagoras.Domain.Model.Categories;
 using Saorsa.Pythagoras.Persistence;
 using Serilog;
@@ -31,7 +32,7 @@ public class DefaultPythagorasCategoriesService : IPythagorasCategoriesService
     public async Task<IEnumerable<CategoryListItem>> GetRootCategoriesAsync(
         CancellationToken cancellationToken = default)
     {
-        CheckSessionUserAndWarn();
+        CheckSessionUserOrDie();
         var dbResults = await DbContext.Categories
             .Where(c => !c.ParentId.HasValue)
             .OrderBy(c => c.Name)
@@ -39,16 +40,19 @@ public class DefaultPythagorasCategoriesService : IPythagorasCategoriesService
         return Mapper.Map<IEnumerable<CategoryListItem>>(dbResults);
     }
 
-    void CheckSessionUserAndWarn()
+    void CheckSessionUserOrDie()
     {
         if (!IdentityProvider.IsLoggedIn)
         {
-            Logger.LogWarning("Anonymous access");
+            Logger.LogCritical("Anonymous access is not allowed");
+            throw new PythagorasException(
+                ErrorCodes.Auth.Unauthorized,
+                "No user session found.");
         }
         else
         {
             var id = IdentityProvider.GetLoggedInUser();
-            Logger.LogDebug("Access from {User}, Groups = {Groups}", 
+            Logger.LogInformation("Access from {User}, Groups = {Groups}", 
                 id!.User,
                 id.Groups);
         }

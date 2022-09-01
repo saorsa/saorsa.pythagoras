@@ -11,13 +11,16 @@ public class PythagorasLoggingFactory : ILoggerFactory
 {
     private readonly SerilogLoggerProvider _provider;
 
-    public PythagorasLoggingFactory(bool dispose = false)
+    public PythagorasLoggingFactory(
+        LogEventLevel minLevel = LogEventLevel.Information,
+        string outputTemplate = "{Timestamp:yyyy-MM-ddTHH:mm:ssK} | {Level:u3} | {SourceContext} | {Message:lj}{NewLine}{Exception}",
+        bool dispose = false)
     {
         var logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
+            .MinimumLevel.Is(minLevel)
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
-            .WriteTo.Console()
+            .WriteTo.Console(outputTemplate: outputTemplate)
             .CreateLogger();
 
         _provider = new SerilogLoggerProvider(logger, dispose);
