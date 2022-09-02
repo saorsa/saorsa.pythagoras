@@ -2,23 +2,18 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Saorsa.Pythagoras.Domain;
+using Saorsa.Pythagoras.Domain.Auth;
 using Saorsa.Pythagoras.Domain.Business;
 using Saorsa.Pythagoras.Domain.Business.Concrete;
 using Saorsa.Pythagoras.Domain.Model;
 
 var svcCollection = new ServiceCollection();
 
-svcCollection.AddPythagoras();
+svcCollection.AddPythagoras(configAction: null);
 
 var sp = svcCollection.BuildServiceProvider();
 var scope = sp.CreateScope();
-var id = scope.ServiceProvider.GetRequiredService<IIdentityProvider>();
-((SimpleIdentityProvider)id).SetLoggedInUser(new IdentityContext("adragolov", new []
-{
-    "sudoers",
-    "users",
-    "admins",
-}));
+var id = scope.ServiceProvider.GetRequiredService<IPythagorasIdentityProvider>();
 var categories = scope.ServiceProvider.GetRequiredService<IPythagorasCategoriesService>();
 categories.GetRootCategoriesAsync().Wait();
 Console.WriteLine("Hello, World!");

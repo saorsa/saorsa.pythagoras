@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Pythagoras;
+namespace Saorsa.Pythagoras;
 
 public class PythagorasException : Exception
 {

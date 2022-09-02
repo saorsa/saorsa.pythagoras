@@ -1,10 +1,11 @@
 using AutoMapper;
+using Saorsa.Pythagoras.Domain.Auth;
 
 namespace Saorsa.Pythagoras.Domain.Business;
 
 public interface IPythagorasBusinessService
 {
-    IIdentityProvider IdentityProvider { get; }
+    IPythagorasIdentityProvider IdentityProvider { get; }
     
     IMapper Mapper { get; }
 }

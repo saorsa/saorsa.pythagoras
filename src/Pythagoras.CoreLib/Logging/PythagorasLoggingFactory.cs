@@ -5,7 +5,7 @@ using Serilog.Events;
 using Serilog.Extensions.Logging;
 using MELLogger = Microsoft.Extensions.Logging.ILogger;
 
-namespace Pythagoras.Logging;
+namespace Saorsa.Pythagoras.Logging;
 
 public class PythagorasLoggingFactory : ILoggerFactory
 {

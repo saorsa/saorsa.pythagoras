@@ -1,16 +1,15 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Pythagoras;
+using Saorsa.Pythagoras.Domain.Auth;
 using Saorsa.Pythagoras.Domain.Model.Categories;
 using Saorsa.Pythagoras.Persistence;
-using Serilog;
 
 namespace Saorsa.Pythagoras.Domain.Business.Concrete;
 
 public class DefaultPythagorasCategoriesService : IPythagorasCategoriesService
 {
-    public IIdentityProvider IdentityProvider { get; }
+    public IPythagorasIdentityProvider IdentityProvider { get; }
 
     public PythagorasDbContext DbContext { get; }
     public ILogger<DefaultPythagorasCategoriesService> Logger { get; }
@@ -18,7 +17,7 @@ public class DefaultPythagorasCategoriesService : IPythagorasCategoriesService
     public IMapper Mapper => PythagorasMapperProvider.Mapper;
 
     public DefaultPythagorasCategoriesService(
-        IIdentityProvider idProvider,
+        IPythagorasIdentityProvider idProvider,
         IPythagorasMapperProvider pythagorasMapperProvider,
         PythagorasDbContext dbContext,
         ILogger<DefaultPythagorasCategoriesService> logger)
