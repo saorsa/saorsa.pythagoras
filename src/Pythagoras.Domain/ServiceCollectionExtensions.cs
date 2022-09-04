@@ -1,8 +1,11 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Saorsa.Pythagoras.CommonRuntime;
 using Saorsa.Pythagoras.Domain.Auth;
 using Saorsa.Pythagoras.Domain.Business;
 using Saorsa.Pythagoras.Domain.Business.Concrete;
+using Saorsa.Pythagoras.Domain.Configuration;
 using Saorsa.Pythagoras.Persistence;
 using Saorsa.Pythagoras.Persistence.Npgsql;
 
@@ -11,18 +14,12 @@ namespace Saorsa.Pythagoras.Domain;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddPythagoras(this IServiceCollection serviceCollection)
-    {
-        return serviceCollection
-            .AddPythagoras(configAction: null);
-    }
-
     public static IServiceCollection AddPythagoras(
         this IServiceCollection serviceCollection,
-        Action<PythagorasOptions>? configAction)
+        PythagorasConfiguration config)
     {
         return serviceCollection
-            .ConfigurePythagoras(configAction)
+            .ConfigurePythagoras(config)
             .AddPythagorasCoreServices()
             .AddPythagorasAuthServices()
             .AddPythagorasDomainServices();
@@ -30,10 +27,15 @@ public static class ServiceCollectionExtensions
     
     public static IServiceCollection AddPythagoras(
         this IServiceCollection serviceCollection,
-        string configSectionPath)
+        string configSectionPath = "Pythagoras")
     {
+        var configRoot = PythagorasRuntime.GetConfigurationFromAppSettings();
+        var configSection = configRoot.GetSection(configSectionPath);
+        var pythagorasConfig = new PythagorasConfiguration();
+        configSection.Bind(pythagorasConfig);
+        
         return serviceCollection
-            .ConfigurePythagoras(configSectionPath)
+            .ConfigurePythagoras(pythagorasConfig)
             .AddPythagorasCoreServices()
             .AddPythagorasAuthServices()
             .AddPythagorasDomainServices();
@@ -41,23 +43,12 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection ConfigurePythagoras(
         this IServiceCollection serviceCollection,
-        Action<PythagorasOptions>? configAction)
-    {
-        serviceCollection.AddOptions<PythagorasOptions>()
-            .Configure(configAction ?? (options =>
-            {
-                options.InvalidateFrom(new PythagorasOptions());
-            }));
-        return serviceCollection;
-    }
-    
-    public static IServiceCollection ConfigurePythagoras(
-        this IServiceCollection serviceCollection,
-        string configSectionPath)
+        PythagorasConfiguration config)
     {
         serviceCollection
-            .AddOptions<PythagorasOptions>()
-            .BindConfiguration(configSectionPath);
+            .AddSingleton(config)
+            .AddOptions<PythagorasConfiguration>()
+            .Configure(options => { options.InvalidateFrom(config); });
         return serviceCollection;
     }
 

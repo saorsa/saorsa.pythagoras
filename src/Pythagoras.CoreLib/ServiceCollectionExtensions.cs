@@ -1,6 +1,6 @@
-using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Saorsa.Pythagoras.InterProcess;
 using Saorsa.Pythagoras.Logging;
 
 namespace Saorsa.Pythagoras;
@@ -16,7 +16,8 @@ public static class ServiceCollectionExtensions
                 .AddSingleton<ILoggerFactory>(_ => new PythagorasLoggingFactory());
         }
 
-        return serviceCollection;
+        return serviceCollection
+            .AddScoped<IProcessRunner, ProcessRunner>();
     }
 
     public static bool IsServiceRegistered<T>(this IServiceCollection serviceCollection)
@@ -27,14 +28,16 @@ public static class ServiceCollectionExtensions
     public static TService? ResolveService<TService>(
         this IServiceCollection serviceCollection, bool requireScope = true)
     {
-        using var provider = serviceCollection.BuildServiceProvider();
+        var provider = serviceCollection.BuildServiceProvider();
         if (requireScope)
         {
-            using var scope = provider.CreateScope();
+            var scope = provider.CreateScope();
             return scope.ServiceProvider.GetService<TService>();
         }
 
-        return provider.GetService<TService>();
+        var result = provider.GetService<TService>();
+        provider.Dispose();
+        return result;
     }
 
     public static TService ResolveRequiredService<TService>(

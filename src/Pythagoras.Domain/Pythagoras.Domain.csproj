@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Pythagoras.CommonRuntime\Pythagoras.CommonRuntime.csproj" />
       <ProjectReference Include="..\Pythagoras.CoreLib\Pythagoras.CoreLib.csproj" />
       <ProjectReference Include="..\Pythagoras.Persistence.Npgsql\Pythagoras.Persistence.Npgsql.csproj" />
       <ProjectReference Include="..\Pythagoras.Persistence\Pythagoras.Persistence.csproj" />

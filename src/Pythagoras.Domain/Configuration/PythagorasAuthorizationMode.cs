@@ -1,4 +1,4 @@
-namespace Saorsa.Pythagoras.Domain;
+namespace Saorsa.Pythagoras.Domain.Configuration;
 
 public enum PythagorasAuthorizationMode
 {

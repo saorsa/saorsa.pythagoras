@@ -23,7 +23,7 @@ public class IdController : ControllerBase
         return Ok(new
         {
             User = user,
-            User2 = (this.User.Identity as ClaimsIdentity).Claims.Select(c => new
+            User2 = (this.User.Identity as ClaimsIdentity)?.Claims.Select(c => new
             {
                 c.Type,
                 c.Value,

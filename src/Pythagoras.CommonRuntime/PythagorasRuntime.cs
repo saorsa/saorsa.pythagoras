@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using ILogger = Serilog.ILogger;
 
@@ -14,16 +13,21 @@ public static class PythagorasRuntime
         => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? 
            (Environment.GetEnvironmentVariable("PYTHAGORAS_ENVIRONMENT") ?? "Development");
 
-    public static ILogger GetConfiguredLogger()
+    public static IConfigurationRoot GetConfigurationFromAppSettings()
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .AddJsonFile(
-                $"appsettings.{AppEnvironment}.json", 
+                $"appsettings.{AppEnvironment}.json",
                 true)
             .Build();
+        return configuration;
+    }
 
+    public static ILogger GetConfiguredLogger()
+    {
+        var configuration = GetConfigurationFromAppSettings();
         var logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .CreateLogger();

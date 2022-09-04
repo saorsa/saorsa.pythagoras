@@ -1,4 +1,3 @@
-using Saorsa.Pythagoras;
 using Saorsa.Pythagoras.CommonRuntime;
 using Saorsa.Pythagoras.Domain;
 using Saorsa.Pythagoras.Domain.Business;
@@ -10,7 +9,7 @@ try
 {
     Log.Information("Creating REST application...");
     var builder = WebApplication.CreateBuilder(args);
-    builder.Services.AddLogging();
+    
     builder.Host.UseSerilog();
     
     Log.Information("Configuring Pythagoras...");
@@ -19,15 +18,12 @@ try
     Log.Information("Configuring REST services...");
     builder.Services.AddControllers();
 
-    var environment = builder.Services.ResolveRequiredService<IWebHostEnvironment>(requireScope: true);
-    if (environment.IsDevelopment())
-    {
-        Log.Warning(
-            "Adding Swagger / Endpoint Explorer. Environment = {Environment}...", 
-            environment.EnvironmentName);
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-    }
+   
+    Log.Warning(
+        "Adding Swagger / Endpoint Explorer. Environment = {Environment}...", 
+        'x');
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
     var app = builder.Build();
 
@@ -37,7 +33,7 @@ try
     {
         Log.Warning(
             "Enabling Swagger UI for environment {Environment}...", 
-            environment.EnvironmentName);
+            app.Environment.EnvironmentName);
         app.UseSwagger();
         app.UseSwaggerUI();
     }

@@ -1,15 +1,15 @@
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Saorsa.Pythagoras.Domain.Configuration;
 using Saorsa.Pythagoras.Domain.Model;
-using Serilog;
 
 namespace Saorsa.Pythagoras.Domain.Auth;
 
 public class DefaultPythagorasIdentityProvider : IPythagorasIdentityProvider
 {
     public ILogger<DefaultPythagorasIdentityProvider> Logger { get; }
-    private readonly PythagorasOptions _pythagorasOptions;
+    private readonly PythagorasConfiguration _pythagorasConfiguration;
     private IdentityContext? _identityContext;
     private ClaimsPrincipal? _claimsPrincipal;
 
@@ -19,14 +19,14 @@ public class DefaultPythagorasIdentityProvider : IPythagorasIdentityProvider
                                 _identityContext.User.Equals(SuperAdminUser,
                                     StringComparison.InvariantCultureIgnoreCase);
 
-    public string SuperAdminUser => _pythagorasOptions.SuperAdminUser;
+    public string SuperAdminUser => _pythagorasConfiguration.SuperAdminUser;
 
     public DefaultPythagorasIdentityProvider(
-        IOptions<PythagorasOptions> opts,
+        IOptions<PythagorasConfiguration> opts,
         ILogger<DefaultPythagorasIdentityProvider> logger)
     {
         Logger = logger;
-        _pythagorasOptions = opts.Value;
+        _pythagorasConfiguration = opts.Value;
     }
     
     public IdentityContext? GetLoggedInUser()

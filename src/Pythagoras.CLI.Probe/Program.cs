@@ -9,7 +9,7 @@ using Saorsa.Pythagoras.Domain.Model;
 
 var svcCollection = new ServiceCollection();
 
-svcCollection.AddPythagoras(configAction: null);
+svcCollection.AddPythagoras();
 
 var sp = svcCollection.BuildServiceProvider();
 var scope = sp.CreateScope();
