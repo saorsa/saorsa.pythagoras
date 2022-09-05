@@ -4,9 +4,9 @@ namespace Saorsa.Pythagoras.InterProcess;
 
 public interface IProcessRunner
 {
-    Process BuildCommandProcess(string commandText);
+    Process BuildBashCommand(string commandText);
 
-    Task<ProcessResult> RunCommandProcessAsync(
+    Task<ProcessResult> RunBashCommandAsync(
         string commandText,
         CancellationToken cancellationToken = default);
 }

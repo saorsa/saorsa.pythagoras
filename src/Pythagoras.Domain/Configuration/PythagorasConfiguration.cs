@@ -4,6 +4,8 @@ public class PythagorasConfiguration
 {
     public string SuperAdminUser { get; set; } = "root";
 
+    public string SuperAdminGroup { get; set; } = "root";
+
     public PythagorasAuthorizationConfiguration Authorization { get; set; } = new();
 }
 

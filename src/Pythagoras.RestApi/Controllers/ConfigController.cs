@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Saorsa.Pythagoras.Domain;
 using Saorsa.Pythagoras.Domain.Configuration;
 
 namespace Saorsa.Pythagoras.RestApi.Controllers;

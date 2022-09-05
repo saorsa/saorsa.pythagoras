@@ -13,9 +13,8 @@ public class ProcessRunner : IProcessRunner
         Logger = logger;
     }
     
-    public Process BuildCommandProcess(string commandText)
+    public Process BuildBashCommand(string commandText)
     {
-        //var command = "groups $USER";
         var escaped = commandText.Replace("\"", "\\\"");
 
         var process = new Process
@@ -63,7 +62,7 @@ public class ProcessRunner : IProcessRunner
         return process;
     }
 
-    public async Task<ProcessResult> RunCommandProcessAsync(
+    public async Task<ProcessResult> RunBashCommandAsync(
         string commandText,
         CancellationToken cancellationToken = default)
     {
@@ -71,7 +70,7 @@ public class ProcessRunner : IProcessRunner
         int? exitCode = default;
         try
         {
-            process = BuildCommandProcess(commandText);
+            process = BuildBashCommand(commandText);
             var started = process.Start();
             var start = DateTimeOffset.Now;
             if (!started)
