@@ -53,12 +53,6 @@ public class ProcessRunner : IProcessRunner
                 commandText);
         };
 
-        process.Disposed += (sender, args) =>
-        {
-            Logger.LogWarning("Disposed process for command [{CommandText}]",
-                commandText);
-        };
-
         return process;
     }
 
@@ -72,29 +66,27 @@ public class ProcessRunner : IProcessRunner
         {
             process = BuildBashCommand(commandText);
             var started = process.Start();
-            var start = DateTimeOffset.Now;
             if (!started)
             {
                 throw new InvalidOperationException(
                     $"Failed to start a new process for command '{commandText}'.");
             }
-            else
-            {
-                var error = await process.StandardError.ReadToEndAsync();
-                var output = await process.StandardOutput.ReadToEndAsync();
-                await process.WaitForExitAsync(cancellationToken);
-                exitCode = process.ExitCode;
 
-                return new ProcessResult
-                {
-                    ProcessId = process?.Id ?? -1,
-                    ExitCode = exitCode,
-                    ErrorOutput = error,
-                    StandardOutput = output,
-                    StartedAt = start,
-                    FinishedAt = DateTimeOffset.Now,
-                };
-            }
+            var start = DateTimeOffset.Now;
+            var error = await process.StandardError.ReadToEndAsync();
+            var output = await process.StandardOutput.ReadToEndAsync();
+            await process.WaitForExitAsync(cancellationToken);
+            exitCode = process.ExitCode;
+
+            return new ProcessResult
+            {
+                ProcessId = process?.Id ?? -1,
+                ExitCode = exitCode,
+                ErrorOutput = error,
+                StandardOutput = output,
+                StartedAt = start,
+                FinishedAt = DateTimeOffset.Now,
+            };
         }
         catch (Exception e)
         {

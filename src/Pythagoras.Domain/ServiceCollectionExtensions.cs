@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Saorsa.Pythagoras.CommonRuntime;
 using Saorsa.Pythagoras.Domain.Auth;
 using Saorsa.Pythagoras.Domain.Business;
 using Saorsa.Pythagoras.Domain.Business.Concrete;

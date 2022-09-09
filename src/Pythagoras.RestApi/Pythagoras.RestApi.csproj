@@ -13,7 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Pythagoras.CommonRuntime\Pythagoras.CommonRuntime.csproj" />
       <ProjectReference Include="..\Pythagoras.Domain\Pythagoras.Domain.csproj" />
     </ItemGroup>
 
