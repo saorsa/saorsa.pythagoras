@@ -6,20 +6,36 @@ namespace Saorsa.Pythagoras.Domain.Auth;
 public class DefaultPythagorasAuthorizationManager : IPythagorasAuthorizationManager
 {
     private readonly ILogger<DefaultPythagorasAuthorizationManager> _logger;
-    public string DefaultScheme => AuthorizationConfiguration.DefaultMode.ToString();
 
-    public string GetSchemeName(PythagorasAuthorizationMode mode)
+    public string? DefaultAuthenticationScheme => AuthenticationConfiguration.DefaultAuthenticationScheme;
+
+    public string GetAuthenticationSchemeName(PythagorasAuthenticationMode mode)
     {
         return mode.ToString();
     }
+
+    public PythagorasAuthenticationMode? GetAuthenticationMode(string authenticationSchemeName)
+    {
+        if (AuthenticationConfiguration.InProc.AuthenticationScheme.Equals(authenticationSchemeName))
+        {
+            return PythagorasAuthenticationMode.InProc;
+        }
+
+        return default;
+    }
     
-    public PythagorasAuthorizationConfiguration AuthorizationConfiguration { get; }
+    public bool IsAuthenticationSchemeEnabled(string authenticationSchemeName)
+    {
+        return GetAuthenticationMode(authenticationSchemeName).HasValue;
+    }
+    
+    public PythagorasAuthenticationConfiguration AuthenticationConfiguration { get; }
     
     public DefaultPythagorasAuthorizationManager(
         PythagorasConfiguration config,
         ILogger<DefaultPythagorasAuthorizationManager> logger)
     {
         _logger = logger;
-        AuthorizationConfiguration = config.Authorization;
+        AuthenticationConfiguration = config.Authentication;
     }
 }

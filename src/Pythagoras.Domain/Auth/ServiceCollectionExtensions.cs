@@ -17,17 +17,17 @@ public static class ServiceCollectionExtensions
         var provider = serviceCollection.BuildServiceProvider();
         var scope = provider.CreateScope();
         var authManager = scope.ServiceProvider.GetRequiredService<IPythagorasAuthorizationManager>();
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<PythagorasAuthorizationConfiguration>>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<PythagorasAuthenticationConfiguration>>();
         logger.LogInformation(
             "Using authorization with default scheme '{PythagorasAuthMode}'...",
-            authManager.AuthorizationConfiguration.DefaultMode);
+            authManager.AuthenticationConfiguration.DefaultMode);
         
         serviceCollection
             .AddAuthentication((options) =>
             {
-                options.DefaultScheme = authManager.DefaultScheme;
+                options.DefaultScheme = authManager.DefaultAuthenticationScheme;
                 
-                options.AddScheme(authManager.GetSchemeName(PythagorasAuthorizationMode.InProc), builder =>
+                options.AddScheme(authManager.GetAuthenticationSchemeName(PythagorasAuthenticationMode.InProc), builder =>
                 {
                     builder.HandlerType = typeof(InProcAuthenticationHandler);
                 });

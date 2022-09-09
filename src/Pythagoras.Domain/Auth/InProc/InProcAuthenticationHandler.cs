@@ -40,12 +40,12 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
         var identity = new ClaimsIdentity(new []
         {
             new Claim(
-                AuthorizationManager.AuthorizationConfiguration.UserClaimType, 
+                AuthorizationManager.AuthenticationConfiguration.UserClaimType, 
                 userName, null, machine, machine)
         },
-            AuthorizationManager.GetSchemeName(PythagorasAuthorizationMode.InProc), 
-            AuthorizationManager.AuthorizationConfiguration.UserClaimType, 
-            AuthorizationManager.AuthorizationConfiguration.RoleClaimType);
+            AuthorizationManager.GetAuthenticationSchemeName(PythagorasAuthenticationMode.InProc), 
+            AuthorizationManager.AuthenticationConfiguration.UserClaimType, 
+            AuthorizationManager.AuthenticationConfiguration.RoleClaimType);
 
         await AddProcessUserGroups(identity, machine);
         
@@ -55,7 +55,7 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
 
         return
             AuthenticateResult.Success(
-                new AuthenticationTicket(principal, AuthorizationManager.DefaultScheme));
+                new AuthenticationTicket(principal, AuthorizationManager.DefaultAuthenticationScheme));
     }
 
     public async Task AddProcessUserGroups(
@@ -73,7 +73,7 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
 
                 foreach (var g in groups)
                 {
-                    identity.AddClaim(new Claim(AuthorizationManager.AuthorizationConfiguration.RoleClaimType,
+                    identity.AddClaim(new Claim(AuthorizationManager.AuthenticationConfiguration.RoleClaimType,
                         g.Replace(Environment.NewLine, string.Empty), 
                         null, 
                         issuer, 

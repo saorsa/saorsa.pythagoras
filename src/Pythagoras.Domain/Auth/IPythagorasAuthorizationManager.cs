@@ -4,7 +4,7 @@ namespace Saorsa.Pythagoras.Domain.Auth;
 
 public interface IPythagorasAuthorizationManager
 {
-    string DefaultScheme { get; }
-    string GetSchemeName(PythagorasAuthorizationMode mode);
-    public PythagorasAuthorizationConfiguration AuthorizationConfiguration { get; }
+    string? DefaultAuthenticationScheme { get; }
+    string GetAuthenticationSchemeName(PythagorasAuthenticationMode mode);
+    public PythagorasAuthenticationConfiguration AuthenticationConfiguration { get; }
 }
