@@ -3,9 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Saorsa.Pythagoras.Domain.Configuration;
 using Saorsa.Pythagoras.InterProcess;
-using Serilog;
 
 namespace Saorsa.Pythagoras.Domain.Auth.InProc;
 
@@ -13,19 +11,19 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
 {
     public ILogger<InProcAuthenticationHandler> Logger { get; }
     public IProcessRunner ProcessRunner { get; }
-    public IPythagorasAuthorizationManager AuthorizationManager { get; }
-    public IPythagorasIdentityProvider IdentityProvider { get; }
+    public IPythagorasAuthenticationManager AuthenticationManager { get; }
+    public IPythagorasSessionManager SessionManager { get; }
 
     public InProcAuthenticationHandler(
         ILogger<InProcAuthenticationHandler> logger,
         IProcessRunner processRunner,
-        IPythagorasAuthorizationManager authorizationManager,
-        IPythagorasIdentityProvider identityProvider)
+        IPythagorasAuthenticationManager authenticationManager,
+        IPythagorasSessionManager sessionManager)
     {
         Logger = logger;
         ProcessRunner = processRunner;
-        AuthorizationManager = authorizationManager;
-        IdentityProvider = identityProvider;
+        AuthenticationManager = authenticationManager;
+        SessionManager = sessionManager;
     }
     
     public Task InitializeAsync(AuthenticationScheme scheme, HttpContext context)
@@ -35,27 +33,28 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
     
     public async Task<AuthenticateResult> AuthenticateAsync()
     {
+        var config = AuthenticationManager.AuthenticationConfiguration.InProc;
         var machine = Environment.MachineName;
         var userName = $"{Environment.UserDomainName}/{Environment.UserName}";
         var identity = new ClaimsIdentity(new []
         {
             new Claim(
-                AuthorizationManager.AuthenticationConfiguration.UserClaimType, 
+                config.UserClaimType, 
                 userName, null, machine, machine)
         },
-            AuthorizationManager.GetAuthenticationSchemeName(PythagorasAuthenticationMode.InProc), 
-            AuthorizationManager.AuthenticationConfiguration.UserClaimType, 
-            AuthorizationManager.AuthenticationConfiguration.RoleClaimType);
+            AuthenticationManager.InProcAuthenticationScheme, 
+            config.UserClaimType, 
+            config.RoleClaimType);
 
         await AddProcessUserGroups(identity, machine);
         
         var principal = new ClaimsPrincipal(identity);
 
-        IdentityProvider.SignIn(principal, identity.NameClaimType, identity.RoleClaimType);
+        SessionManager.SignIn(identity);
 
         return
             AuthenticateResult.Success(
-                new AuthenticationTicket(principal, AuthorizationManager.DefaultAuthenticationScheme));
+                new AuthenticationTicket(principal, AuthenticationManager.InProcAuthenticationScheme));
     }
 
     public async Task AddProcessUserGroups(
@@ -64,6 +63,7 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
             RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
+            var config = AuthenticationManager.AuthenticationConfiguration.InProc;
             var userGroupsResult = await ProcessRunner.RunBashCommandAsync("groups $USER");
             if (userGroupsResult.IsSuccess && userGroupsResult.StandardOutput.Length > 0)
             {
@@ -73,7 +73,7 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
 
                 foreach (var g in groups)
                 {
-                    identity.AddClaim(new Claim(AuthorizationManager.AuthenticationConfiguration.RoleClaimType,
+                    identity.AddClaim(new Claim(config.RoleClaimType,
                         g.Replace(Environment.NewLine, string.Empty), 
                         null, 
                         issuer, 
@@ -84,7 +84,8 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
             {
                 Logger.LogError("Error fetching user groups: {ErrorOutput}", userGroupsResult.ErrorOutput);
                 throw new ApplicationException(
-                    $"Error fetching user groups ({userGroupsResult.ExitCode??-1}): {userGroupsResult.ErrorOutput}");
+                    $"Error fetching user groups ({userGroupsResult.ExitCode??-1}): " +
+                    $"{userGroupsResult.ErrorOutput}");
             }
         }
         else

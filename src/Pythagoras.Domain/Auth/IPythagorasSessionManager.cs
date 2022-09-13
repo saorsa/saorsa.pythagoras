@@ -3,9 +3,9 @@ using Saorsa.Pythagoras.Domain.Model;
 
 namespace Saorsa.Pythagoras.Domain.Auth;
 
-public interface IPythagorasIdentityProvider
+public interface IPythagorasSessionManager
 {
-    void SignIn(ClaimsPrincipal claimsId, string userClaimType = "user", string roleClaimType = "group");
+    void SignIn(ClaimsIdentity identity);
     bool IsLoggedIn { get; }
     bool IsSuperAdmin { get; }
     IdentityContext? GetLoggedInUser();

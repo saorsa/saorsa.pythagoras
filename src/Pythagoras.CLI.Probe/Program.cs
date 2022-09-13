@@ -13,7 +13,7 @@ svcCollection.AddPythagoras();
 
 var sp = svcCollection.BuildServiceProvider();
 var scope = sp.CreateScope();
-var id = scope.ServiceProvider.GetRequiredService<IPythagorasIdentityProvider>();
+var id = scope.ServiceProvider.GetRequiredService<IPythagorasSessionManager>();
 var categories = scope.ServiceProvider.GetRequiredService<IPythagorasCategoriesService>();
 categories.GetRootCategoriesAsync().Wait();
 Console.WriteLine("Hello, World!");

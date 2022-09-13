@@ -9,17 +9,17 @@ namespace Saorsa.Pythagoras.RestApi.Controllers;
 [Authorize, Route("[controller]")]
 public class IdController : ControllerBase
 {
-    public IPythagorasIdentityProvider IdentityProvider { get; }
+    public IPythagorasSessionManager SessionManager { get; }
 
-    public IdController(IPythagorasIdentityProvider identityProvider)
+    public IdController(IPythagorasSessionManager sessionManager)
     {
-        IdentityProvider = identityProvider;
+        SessionManager = sessionManager;
     }
 
     [HttpGet]
     public ActionResult WhoAmI()
     {
-        var user = IdentityProvider.GetLoggedInUser();
+        var user = SessionManager.GetLoggedInUser();
         return Ok(new
         {
             User = user,

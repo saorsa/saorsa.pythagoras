@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Saorsa.Pythagoras.Domain.Auth.InProc;
 using Saorsa.Pythagoras.Domain.Configuration;
@@ -11,26 +10,32 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddPythagorasAuthServices(
         this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<IPythagorasAuthorizationManager, DefaultPythagorasAuthorizationManager>();
-        serviceCollection.AddScoped<IPythagorasIdentityProvider, DefaultPythagorasIdentityProvider>();
+        serviceCollection.AddSingleton<IPythagorasAuthenticationManager, DefaultPythagorasAuthenticationManager>();
+        serviceCollection.AddScoped<IPythagorasSessionManager, DefaultPythagorasSessionManager>();
         
         var provider = serviceCollection.BuildServiceProvider();
         var scope = provider.CreateScope();
-        var authManager = scope.ServiceProvider.GetRequiredService<IPythagorasAuthorizationManager>();
+        var authManager = scope.ServiceProvider.GetRequiredService<IPythagorasAuthenticationManager>();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<PythagorasAuthenticationConfiguration>>();
-        logger.LogInformation(
-            "Using authorization with default scheme '{PythagorasAuthMode}'...",
-            authManager.AuthenticationConfiguration.DefaultMode);
+        var inProcSchemeName = authManager.InProcAuthenticationScheme;
         
         serviceCollection
             .AddAuthentication((options) =>
             {
                 options.DefaultScheme = authManager.DefaultAuthenticationScheme;
-                
-                options.AddScheme(authManager.GetAuthenticationSchemeName(PythagorasAuthenticationMode.InProc), builder =>
-                {
-                    builder.HandlerType = typeof(InProcAuthenticationHandler);
-                });
+
+                if (authManager.IsAuthenticationSchemeEnabled(inProcSchemeName))
+                { 
+                    logger.LogInformation(
+                        "Adding authentication for scheme '{AuthenticationScheme}'...",
+                        inProcSchemeName);
+                    
+                    options.DefaultScheme ??= inProcSchemeName;
+                    options.AddScheme(inProcSchemeName, builder =>
+                    {
+                        builder.HandlerType = typeof(InProcAuthenticationHandler);
+                    });
+                }
             });
         
         scope.Dispose();

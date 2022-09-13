@@ -5,7 +5,7 @@ namespace Saorsa.Pythagoras.Domain.Business;
 
 public interface IPythagorasBusinessService
 {
-    IPythagorasIdentityProvider IdentityProvider { get; }
+    IPythagorasSessionManager SessionManager { get; }
     
     IMapper Mapper { get; }
 }

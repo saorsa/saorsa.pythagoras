@@ -9,7 +9,7 @@ namespace Saorsa.Pythagoras.Domain.Business.Concrete;
 
 public class DefaultPythagorasCategoriesService : IPythagorasCategoriesService
 {
-    public IPythagorasIdentityProvider IdentityProvider { get; }
+    public IPythagorasSessionManager SessionManager { get; }
 
     public PythagorasDbContext DbContext { get; }
     public ILogger<DefaultPythagorasCategoriesService> Logger { get; }
@@ -17,12 +17,12 @@ public class DefaultPythagorasCategoriesService : IPythagorasCategoriesService
     public IMapper Mapper => PythagorasMapperProvider.Mapper;
 
     public DefaultPythagorasCategoriesService(
-        IPythagorasIdentityProvider idProvider,
+        IPythagorasSessionManager idProvider,
         IPythagorasMapperProvider pythagorasMapperProvider,
         PythagorasDbContext dbContext,
         ILogger<DefaultPythagorasCategoriesService> logger)
     {
-        IdentityProvider = idProvider;
+        SessionManager = idProvider;
         DbContext = dbContext;
         Logger = logger;
         PythagorasMapperProvider = pythagorasMapperProvider;
@@ -41,7 +41,7 @@ public class DefaultPythagorasCategoriesService : IPythagorasCategoriesService
 
     void CheckSessionUserOrDie()
     {
-        if (!IdentityProvider.IsLoggedIn)
+        if (!SessionManager.IsLoggedIn)
         {
             Logger.LogCritical("Anonymous access is not allowed");
             throw new PythagorasException(
@@ -50,7 +50,7 @@ public class DefaultPythagorasCategoriesService : IPythagorasCategoriesService
         }
         else
         {
-            var id = IdentityProvider.GetLoggedInUser();
+            var id = SessionManager.GetLoggedInUser();
             Logger.LogInformation("Access from {User}, Groups = {Groups}", 
                 id!.User,
                 id.Groups);

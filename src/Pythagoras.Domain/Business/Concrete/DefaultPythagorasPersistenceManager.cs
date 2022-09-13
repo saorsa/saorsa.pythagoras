@@ -7,12 +7,12 @@ namespace Saorsa.Pythagoras.Domain.Business.Concrete;
 
 public class DefaultPythagorasPersistenceManager
 {
-    public IPythagorasIdentityProvider IdProvider { get; }
+    public IPythagorasSessionManager IdProvider { get; }
     public PythagorasDbContext DbContext { get; }
     public ILogger<DefaultPythagorasPersistenceManager> Logger { get; }
 
     public DefaultPythagorasPersistenceManager(
-        IPythagorasIdentityProvider idProvider,
+        IPythagorasSessionManager idProvider,
         PythagorasDbContext dbContext,
         ILogger<DefaultPythagorasPersistenceManager> logger)
     {
