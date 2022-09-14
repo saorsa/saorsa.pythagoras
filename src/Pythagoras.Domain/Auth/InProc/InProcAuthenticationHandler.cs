@@ -69,7 +69,8 @@ public class InProcAuthenticationHandler : IAuthenticationHandler
             {
                 var groups = userGroupsResult.StandardOutput
                     .Replace(":", string.Empty)
-                    .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Distinct();
 
                 foreach (var g in groups)
                 {

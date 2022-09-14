@@ -1,6 +1,6 @@
 namespace Saorsa.Pythagoras.Domain.Model;
 
-public class IdentityContext
+public class IdentitySession
 {
     public string AuthenticationScheme { get; }
     
@@ -8,7 +8,7 @@ public class IdentityContext
     
     public IEnumerable<string> Groups { get; }
 
-    public IdentityContext(
+    public IdentitySession(
         string authenticationScheme,
         string user,
         IEnumerable<string>? groups = null)

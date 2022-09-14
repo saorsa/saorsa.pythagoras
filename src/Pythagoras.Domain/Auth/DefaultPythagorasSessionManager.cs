@@ -9,7 +9,7 @@ public class DefaultPythagorasSessionManager : IPythagorasSessionManager
     public IPythagorasAuthenticationManager AuthenticationManager { get; }
     public ILogger<DefaultPythagorasSessionManager> Logger { get; }
     private readonly object SessionLock = new { };
-    private IdentityContext? _session;
+    private IdentitySession? _session;
     private ClaimsIdentity? _claimsId;
 
     public bool IsLoggedIn => _session != null;
@@ -35,7 +35,7 @@ public class DefaultPythagorasSessionManager : IPythagorasSessionManager
         Logger = logger;
     }
     
-    public IdentityContext? GetLoggedInUser()
+    public IdentitySession? GetLoggedInUser()
     {
         return _session;
     }
@@ -67,7 +67,7 @@ public class DefaultPythagorasSessionManager : IPythagorasSessionManager
         lock (SessionLock)
         {
             _claimsId = identity;
-            _session = new IdentityContext(
+            _session = new IdentitySession(
                 authenticationType,
                 userClaim.Value,
                 groupClaims);

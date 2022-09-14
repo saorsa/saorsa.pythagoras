@@ -22,7 +22,13 @@ public class DefaultPythagorasAuthenticationManager : IPythagorasAuthenticationM
     
     public string GetAuthenticationSchemeName(PythagorasAuthenticationMode mode)
     {
-        return mode.ToString();
+        switch (mode)
+        {
+            case PythagorasAuthenticationMode.InProc:
+                return AuthenticationConfiguration.InProc.AuthenticationScheme;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+        }
     }
 
     public PythagorasAuthenticationMode? GetAuthenticationMode(string authenticationSchemeName)

@@ -8,5 +8,5 @@ public interface IPythagorasSessionManager
     void SignIn(ClaimsIdentity identity);
     bool IsLoggedIn { get; }
     bool IsSuperAdmin { get; }
-    IdentityContext? GetLoggedInUser();
+    IdentitySession? GetLoggedInUser();
 }

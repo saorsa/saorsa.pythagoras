@@ -2,6 +2,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Saorsa.Pythagoras.Domain.Auth;
+using Saorsa.Pythagoras.Domain.Model;
+using Saorsa.Pythagoras.RestApi.Model;
 
 namespace Saorsa.Pythagoras.RestApi.Controllers;
 
@@ -17,19 +19,12 @@ public class IdController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult WhoAmI()
+    public ActionResult<DTOIdentityContext> WhoAmI()
     {
-        var user = SessionManager.GetLoggedInUser();
-        return Ok(new
-        {
-            User = user,
-            User2 = (this.User.Identity as ClaimsIdentity)?.Claims.Select(c => new
-            {
-                c.Type,
-                c.Value,
-                c.ValueType,
-                c.Issuer
-            })
-        });
+        var user = SessionManager.GetLoggedInUser()!;
+        var claims = (this.User.Identity as ClaimsIdentity)?
+            .Claims.Select(c => new IdentityClaim(c)) ?? Array.Empty<IdentityClaim>();
+
+        return Ok(new DTOIdentityContext(user, claims));
     }
 }
